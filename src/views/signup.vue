@@ -105,6 +105,7 @@ export default class Signup extends Vue {
   phone: string = ''
   otp: string = ''
   connectInstagram() {
+    // Todo: add local storage?
     // @ts-ignore
     this.instagram('oauth/authorize/').connect()
   }
