@@ -1,4 +1,5 @@
 import Index from '../views/Index.vue'
+import Signup from '../views/signup.vue'
 
 export interface Route {
   path: string
@@ -7,14 +8,20 @@ export interface Route {
   beforeEnter?: any
   redirect?: string
   params?: any
-  layout: string
+  layout?: string
 }
 
 export const routes: Route[] = [
   {
     path: '/',
     name: 'Index',
-    component: Index,
-    layout: 'AppLayout'
+    component: null,
+    redirect: '/signup'
+  },
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: Signup,
+    layout: 'AuthLayout'
   }
 ]

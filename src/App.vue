@@ -6,10 +6,11 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import AppLayout from './layouts/app.vue'
+import AuthLayout from './layouts/auth.vue'
 import { routes, Route } from './router/routes'
 
 @Component({
-  components: { AppLayout }
+  components: { AppLayout, AuthLayout }
 })
 export default class App extends Vue {
   get currentLayout() {
@@ -19,3 +20,6 @@ export default class App extends Vue {
   }
 }
 </script>
+<style lang="scss">
+@import 'assets/scss/app.scss';
+</style>
