@@ -1,29 +1,21 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+    <component v-if="currentLayout" :is="currentLayout" />
   </div>
 </template>
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import AppLayout from './layouts/app.vue'
+import { routes, Route } from './router/routes'
 
-<style lang="scss">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+@Component({
+  components: { AppLayout }
+})
+export default class App extends Vue {
+  get currentLayout() {
+    const routeName = this.$route['name']
+    const route = routes.find((route: Route) => route.name === routeName)
+    return route ? route.layout : 'AuthLayout'
   }
 }
-</style>
+</script>
