@@ -109,7 +109,26 @@ export default class Signup extends Vue {
     // @ts-ignore
     this.instagram('oauth/authorize/').connect()
   }
-  signupUser() {}
+  async signupUser() {
+    const {
+      data: { status, message }
+    } = await axios.post(`${apiUrl}/users/createuser`, {
+      name: this.name,
+      email: this.email,
+      address: this.address,
+      phone: this.phone,
+      user_identifier: this.user_id
+    })
+    console.log('status :', status)
+    if (status === 'OK') {
+      this.$modal.show('signup-otp-modal')
+      const {
+        data: { status, message }
+      } = await axios.post(`${apiUrl}/api/getotp?phone=${this.phone}`)
+      console.log('status :', status)
+      console.log('message :', message)
+    }
+  }
   confirmOtp() {}
 }
 </script>

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import InstagramHTTP from '@/api/HTTP/InstagramHTTP'
+import InstagramHTTP from '@/api/InstagramHTTP'
 
 Vue.mixin({
   methods: {
