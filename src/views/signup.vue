@@ -95,6 +95,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
+import { storeInLocalStorage, getFromLocaleStorage } from '@/api/storage'
 
 @Component
 export default class Signup extends Vue {
@@ -104,32 +105,58 @@ export default class Signup extends Vue {
   address: string = ''
   phone: string = ''
   otp: string = ''
-  connectInstagram() {
-    // Todo: add local storage?
+  mounted() {
     // @ts-ignore
-    this.instagram('oauth/authorize/').connect()
+    const {
+      user: { name, address, email, phone }
+    } = getFromLocaleStorage()
+    this.name = name || ''
+    this.email = email || ''
+    this.address = address || ''
+    this.phone = phone || ''
+  }
+  connectInstagram() {
+    storeInLocalStorage({
+      user: {
+        name: this.name,
+        email: this.email,
+        address: this.address,
+        phone: this.phone
+      }
+    })
+    // @ts-ignore
+    this.instagram().connect('oauth/authorize/')
   }
   async signupUser() {
-    const {
-      data: { status, message }
-    } = await axios.post(`${apiUrl}/users/createuser`, {
-      name: this.name,
-      email: this.email,
-      address: this.address,
-      phone: this.phone,
-      user_identifier: this.user_id
-    })
-    console.log('status :', status)
-    if (status === 'OK') {
+    try {
+      // @ts-ignore
+      await this.api('users').create({
+        name: this.name,
+        email: this.email,
+        address: this.address,
+        phone: this.phone,
+        user_identifier: this.userId
+      })
       this.$modal.show('signup-otp-modal')
-      const {
-        data: { status, message }
-      } = await axios.post(`${apiUrl}/api/getotp?phone=${this.phone}`)
-      console.log('status :', status)
-      console.log('message :', message)
+      // @ts-ignore
+      await this.api(`api/getotp?phone=${this.phone}`).create()
+    } catch (e) {
+      console.log(e)
     }
   }
-  confirmOtp() {}
+  async confirmOtp() {
+    try {
+      const {
+        data: { user, token }
+        // @ts-ignore
+      } = await this.api(
+        `api/checkotp?phone=${this.phone}&otp=${this.otp}`
+      ).create()
+      console.log(user, token)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 }
 </script>
 <style lang="scss">

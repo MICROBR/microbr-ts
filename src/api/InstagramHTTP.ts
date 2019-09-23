@@ -1,16 +1,14 @@
-import { BaseApi } from '@/api/baseApi'
 import { createRandomString } from '@/utils/functions'
-import { IApi } from '@/types/Api'
 
-class InstagramHTTP extends BaseApi implements IApi {
-  baseUrl: string = 'https://api.instagram.com/'
+class InstagramHTTP {
+  private instagramUrl: string = 'https://api.instagram.com/'
   connect(url: string) {
     const client = process.env.VUE_APP_INSTAGRAM_CLIENT
     if (!client) throw Error('Instagram client not found')
     const user_identifier = createRandomString(10)
-    const redirectUri = `${this.baseUrl}/instagram/callback/`
+    const redirectUri = `${process.env.VUE_APP_API_URL}/instagram/callback`
     window.open(
-      `${this.baseUrl}${url}?client_id=${client}&redirect_uri=${redirectUri}&response_type=code&state=${user_identifier}`,
+      `${this.instagramUrl}${url}?client_id=${client}&redirect_uri=${redirectUri}&response_type=code&state=${user_identifier}`,
       '_self'
     )
   }
