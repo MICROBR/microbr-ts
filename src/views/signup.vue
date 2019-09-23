@@ -110,6 +110,7 @@ export default class Signup extends Vue {
     const {
       user: { name, address, email, phone }
     } = getFromLocaleStorage()
+    console.log(this.userId)
     this.name = name || ''
     this.email = email || ''
     this.address = address || ''
@@ -152,7 +153,8 @@ export default class Signup extends Vue {
       } = await this.api(
         `api/checkotp?phone=${this.phone}&otp=${this.otp}`
       ).create()
-      console.log(user, token)
+      this.$store.commit('setUser', { user, token })
+      this.$router.push('/dashboard')
     } catch (e) {
       console.log(e)
     }
