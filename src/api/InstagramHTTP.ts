@@ -7,6 +7,7 @@ class InstagramHTTP {
     if (!client) throw Error('Instagram client not found')
     const user_identifier = createRandomString(10)
     const redirectUri = `${process.env.VUE_APP_API_URL}/instagram/callback`
+
     window.open(
       `${this.instagramUrl}${url}?client_id=${client}&redirect_uri=${redirectUri}&response_type=code&state=${user_identifier}`,
       '_self'
